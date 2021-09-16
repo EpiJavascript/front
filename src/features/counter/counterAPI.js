@@ -4,3 +4,9 @@ export function fetchCount(amount = 1) {
     setTimeout(() => resolve({ data: amount }), 500)
   );
 }
+
+export function test(amount = 1) {
+  return new Promise((resolve) => {
+  }
+  );
+}
