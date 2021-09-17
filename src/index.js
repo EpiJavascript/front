@@ -1,20 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
-import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import App from './App';
-import { store } from './app/store';
+import './index.css';
 import { Provider } from 'react-redux';
-import * as serviceWorker from './serviceWorker';
+import store from './app/store';
+import App from './App';
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <Router>
         <App />
-        </Router>
+      </Router>
     </Provider>
   </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById('root'),
 );
