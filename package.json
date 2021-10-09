@@ -3,27 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-<<<<<<< HEAD
-    "@reduxjs/toolkit": "^1.5.1",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-redux": "^7.2.3",
-    "react-router-dom": "^5.3.0",
-    "react-scripts": "4.0.3"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "lint": "eslint --fix --ext .js,.jsx ."
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-=======
     "@craco/craco": "^6.3.0",
     "@fontsource/roboto": "^4.5.0",
     "history": "^4.10.1",
@@ -42,7 +21,6 @@
     "test": "craco test",
     "eject": "react-scripts eject",
     "lint": "eslint --fix --ext .js,.jsx ."
->>>>>>> origin/dev
   },
   "browserslist": {
     "production": [
@@ -57,11 +35,8 @@
     ]
   },
   "devDependencies": {
-<<<<<<< HEAD
-=======
     "autoprefixer": "^9.8.8",
     "babel-eslint": "^10.1.0",
->>>>>>> origin/dev
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",
@@ -70,12 +45,8 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.25.1",
     "eslint-plugin-react-hooks": "^4.2.0",
-<<<<<<< HEAD
-    "prettier": "^2.4.1"
-=======
     "postcss": "^7.0.39",
     "prettier": "^2.4.1",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.16"
->>>>>>> origin/dev
   }
 }
