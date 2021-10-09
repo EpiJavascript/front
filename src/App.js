@@ -1,22 +1,37 @@
-import React from 'react';
-import './App.css';
-import { Switch, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import {
+  Router, Route, Switch, Redirect,
+} from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import './index.css';
 
-import Home from './components/Home';
-import Register from './components/Register';
+import history from './_helpers/history';
+import alertActions from './_actions/alert.actions';
+import PrivateRoute from './_components/PrivateRoute';
+import HomePage from './screens/HomePage';
+import LoginPage from './screens/LoginPage';
+import RegisterPage from './screens/RegisterPage';
 
 function App() {
-  return (
-    <div>
-      <Switch>
-        <Route path="/register">
-          <Register />
-        </Route>
+  const dispatch = useDispatch();
 
-        <Route path="/">
-          <Home />
-        </Route>
-      </Switch>
+  useEffect(() => {
+    history.listen(() => {
+      // clear alert on location change
+      dispatch(alertActions.clear());
+    });
+  }, [dispatch]);
+
+  return (
+    <div className="">
+      <Router history={history}>
+        <Switch>
+          <PrivateRoute exact path="/" component={HomePage} />
+          <Route path="/login" component={LoginPage} />
+          <Route path="/register" component={RegisterPage} />
+          <Redirect from="*" to="/" />
+        </Switch>
+      </Router>
     </div>
   );
 }
