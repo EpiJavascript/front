@@ -8,9 +8,9 @@ import errorConstant from '../_constants/error.constants';
 function RegisterPage() {
   const alert = useSelector((state) => state.alert);
   const [user, setUser] = useState({
-    email: '',
-    username: '',
-    password: '',
+    email: 'axel@mail.com',
+    username: 'Axel',
+    password: 'p@ssword',
   });
   const [errors, setErrors] = useState({
     email: '',

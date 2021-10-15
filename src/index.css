@@ -13,6 +13,10 @@ body {
   font-family: Rubik, sans-serif, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+#home aside {
+  margin-left: -3px;
+}
+
 .ed-brand {
   /* font-family: 'Grechen Fuemen', cursive; */
   /* font-family: 'Yatra One', cursive; */

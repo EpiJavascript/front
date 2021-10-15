@@ -8,8 +8,8 @@ import errorConstant from '../_constants/error.constants';
 function LoginPage() {
   const alert = useSelector((state) => state.alert);
   const [inputs, setInputs] = useState({
-    email: '',
-    password: '',
+    email: 'axel@mail.com',
+    password: 'p@ssword',
   });
   const [errors, setErrors] = useState({
     email: '',

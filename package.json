@@ -18,6 +18,7 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
+    "build:development": "NODE_ENV=development craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
     "lint": "eslint --fix --ext .js,.jsx ."

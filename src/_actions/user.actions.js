@@ -63,42 +63,22 @@ function register(user) {
   };
 }
 
-function getAll() {
+function getSelfUser() {
   function request() {
-    return { type: userConstants.GETALL_REQUEST };
+    return { type: userConstants.GETSELFUSER_REQUEST };
   }
-  function success(users) {
-    return { type: userConstants.GETALL_SUCCESS, users };
+  function success(user) {
+    return { type: userConstants.GETSELFUSER_SUCCESS, user };
   }
   function failure(error) {
-    return { type: userConstants.GETALL_FAILURE, error };
+    return { type: userConstants.GETSELFUSER_FAILURE, error };
   }
   return (dispatch) => {
     dispatch(request());
 
-    userService.getAll().then(
-      (users) => dispatch(success(users)),
+    userService.getSelfUser().then(
+      (user) => dispatch(success(user)),
       (error) => dispatch(failure(error.toString())),
-    );
-  };
-}
-
-function deleteFunc(id) {
-  function request() {
-    return { type: userConstants.DELETE_REQUEST, id };
-  }
-  function success() {
-    return { type: userConstants.DELETE_SUCCESS, id };
-  }
-  function failure(error) {
-    return { type: userConstants.DELETE_FAILURE, id, error };
-  }
-  return (dispatch) => {
-    dispatch(request(id));
-
-    userService.delete(id).then(
-      () => dispatch(success(id)),
-      (error) => dispatch(failure(id, error.toString())),
     );
   };
 }
@@ -107,8 +87,7 @@ const userActions = {
   login,
   logout,
   register,
-  getAll,
-  delete: deleteFunc,
+  getSelfUser,
 };
 
 export default userActions;
