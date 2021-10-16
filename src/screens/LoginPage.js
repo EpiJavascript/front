@@ -82,7 +82,7 @@ function LoginPage() {
                   <input
                     name="email"
                     className=" w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-purple-500"
-                    type=""
+                    type="email"
                     placeholder="mail@gmail.com"
                     value={email}
                     onChange={handleChange}

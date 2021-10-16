@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import CreateServer from '../modals/CreateServer';
 
 import userActions from '../_actions/user.actions';
 
 function HomePage() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
+  const [modalIsOpen, setIsOpen] = React.useState(false);
 
   useEffect(() => {
     dispatch(userActions.getSelfUser());
@@ -15,6 +17,15 @@ function HomePage() {
   useEffect(() => {
     console.log(user);
   });
+
+  const openModal = () => {
+    console.log('openmodal');
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
 
   // function handleDeleteUser(id) {
   //   dispatch(userActions.delete(id));
@@ -39,19 +50,21 @@ function HomePage() {
         <ul className="flex-1 my-3">
           {
             user && user.servers && user.servers.map((server) => (
-              <li className="mb-3 w-full flex justify-center items-center">
-                <li className="transition ease-in duration-300 bg-gray-600 hover:bg-indigo-500 rounded-full hover:rounded-3xl h-16 w-16 flex items-center justify-center cursor-pointer">
+              <li key={server.id} className="mb-3 w-full flex justify-center items-center">
+                <div className="transition ease-in duration-300 bg-gray-600 hover:bg-indigo-500 rounded-full hover:rounded-3xl h-16 w-16 flex items-center justify-center cursor-pointer">
                   <h1 className="text-xl">{server.name[0]}</h1>
-                </li>
+                </div>
               </li>
             ))
           }
           <div className="flex justify-center items-center">
-            <div className="transition ease-in duration-300 bg-gray-600 hover:bg-indigo-500 rounded-full h-12 w-12 flex items-center justify-center cursor-pointer">
-              <div className="text-xl text-white flex self-center">
-                <i className="fal fa-plus" />
+            <button type="button" onClick={openModal}>
+              <div className="transition ease-in duration-300 bg-gray-600 hover:bg-indigo-500 rounded-full h-12 w-12 flex items-center justify-center cursor-pointer">
+                <div className="text-xl text-white flex self-center">
+                  <i className="fal fa-plus" />
+                </div>
               </div>
-            </div>
+            </button>
           </div>
         </ul>
 
@@ -72,6 +85,7 @@ function HomePage() {
           !
         </h1>
       </div>
+      <CreateServer show={modalIsOpen} handleClose={closeModal} />
     </div>
   );
 }
