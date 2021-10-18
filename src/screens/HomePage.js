@@ -8,30 +8,24 @@ import userActions from '../_actions/user.actions';
 function HomePage() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
-  const [modalIsOpen, setIsOpen] = React.useState(false);
+  const [isCreateServerModalOpen, setCreateServerModalStatus] = React.useState(false);
 
   useEffect(() => {
     dispatch(userActions.getSelfUser());
   }, [dispatch]);
 
-  useEffect(() => {
-    console.log(user);
-  });
-
-  const openModal = () => {
-    console.log('openmodal');
-    setIsOpen(true);
+  const openCreateServerModal = () => {
+    setCreateServerModalStatus(true);
   };
 
-  const closeModal = () => {
-    setIsOpen(false);
+  const closeCreateServerModal = () => {
+    setCreateServerModalStatus(false);
   };
 
   // function handleDeleteUser(id) {
   //   dispatch(userActions.delete(id));
   // }
 
-  /* eslint-disable no-nested-ternary */
   return (
     <div id="home" className="h-screen w-screen flex bg-indigo-200">
 
@@ -58,7 +52,7 @@ function HomePage() {
             ))
           }
           <div className="flex justify-center items-center">
-            <button type="button" onClick={openModal}>
+            <button type="button" onClick={openCreateServerModal}>
               <div className="transition ease-in duration-300 bg-gray-600 hover:bg-indigo-500 rounded-full h-12 w-12 flex items-center justify-center cursor-pointer">
                 <div className="text-xl text-white flex self-center">
                   <i className="fal fa-plus" />
@@ -85,7 +79,8 @@ function HomePage() {
           !
         </h1>
       </div>
-      <CreateServer show={modalIsOpen} handleClose={closeModal} />
+      {user
+        && <CreateServer handleClose={closeCreateServerModal} isOpen={isCreateServerModalOpen} />}
     </div>
   );
 }

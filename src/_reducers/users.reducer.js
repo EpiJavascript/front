@@ -7,7 +7,6 @@ function user(state = {}, action) {
         loading: true,
       };
     case userConstants.GETSELFUSER_SUCCESS:
-      console.log(action.user);
       return {
         user: action.user,
       };

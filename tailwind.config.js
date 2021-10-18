@@ -5,6 +5,8 @@ module.exports = {
     extend: {
       borderRadius: ['hover', 'focus'],
       transitionProperty: ['hover', 'focus'],
+      opacity: ['disabled'],
+      cursor: ['disabled'],
     },
   },
   theme: {
@@ -12,6 +14,12 @@ module.exports = {
       colors: {
         'regal-blue': '#243c5a',
         primary: '#7157f2',
+      },
+      minWidth: {
+        96: '96px',
+      },
+      width: {
+        440: '440px',
       },
     },
   },

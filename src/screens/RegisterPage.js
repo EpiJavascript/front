@@ -30,7 +30,7 @@ function RegisterPage() {
   }
 
   function handleValidation() {
-    let formIsValid = true;
+    let isFormValid = true;
     const currentErrors = {
       email: '',
       username: '',
@@ -38,7 +38,7 @@ function RegisterPage() {
     };
 
     if (!user.email) {
-      formIsValid = false;
+      isFormValid = false;
       currentErrors.email = 'Please enter a valid adress email.';
     } else {
       const lastAtPos = user.email.lastIndexOf('@');
@@ -52,29 +52,29 @@ function RegisterPage() {
           && user.email.length - lastDotPos > 2
         )
       ) {
-        formIsValid = false;
+        isFormValid = false;
         currentErrors.email = 'Please enter a valid adress email.';
       }
     }
 
     if (!user.username) {
-      formIsValid = false;
+      isFormValid = false;
       currentErrors.username = 'Please enter a username.';
     } else if (!user.username.match(/^[a-zA-Z0-9]+$/)) {
-      formIsValid = false;
+      isFormValid = false;
       currentErrors.username = 'Unauthorized characters.';
     }
 
     if (!user.password) {
-      formIsValid = false;
+      isFormValid = false;
       currentErrors.password = 'Please enter a password.';
     } else if (user.password.length < 8) {
-      formIsValid = false;
+      isFormValid = false;
       currentErrors.password = 'Length must be at least 8 characters.';
     }
 
     setErrors(() => (currentErrors));
-    return formIsValid;
+    return isFormValid;
   }
 
   function handleSubmit(e) {

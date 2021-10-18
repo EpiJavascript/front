@@ -30,24 +30,24 @@ function LoginPage() {
   }
 
   function handleValidation() {
-    let formIsValid = true;
+    let isFormValid = true;
     const currentErrors = {
       email: '',
       password: '',
     };
 
     if (!email) {
-      formIsValid = false;
+      isFormValid = false;
       currentErrors.email = 'Please enter a valid adress email.';
     }
 
     if (!password) {
-      formIsValid = false;
+      isFormValid = false;
       currentErrors.password = 'Please enter a password.';
     }
 
     setErrors(() => (currentErrors));
-    return formIsValid;
+    return isFormValid;
   }
 
   function handleSubmit(e) {
