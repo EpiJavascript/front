@@ -21,6 +21,13 @@ module.exports = {
       width: {
         440: '440px',
       },
+      borderRadius: {
+        20: '22px',
+        32: '32px',
+      },
+      transitionProperty: {
+        server: 'border-radius, background-color, color',
+      },
     },
   },
   plugins: [],

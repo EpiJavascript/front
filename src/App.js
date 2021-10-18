@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import {
-  Router, Route, Switch, Redirect,
+  Router, Switch, Redirect,
 } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import './index.css';
@@ -8,6 +8,7 @@ import './index.css';
 import history from './_helpers/history';
 import alertActions from './_actions/alert.actions';
 import PrivateRoute from './_components/PrivateRoute';
+import PublicRoute from './_components/PublicRoute';
 import HomePage from './screens/HomePage';
 import LoginPage from './screens/LoginPage';
 import RegisterPage from './screens/RegisterPage';
@@ -27,8 +28,8 @@ function App() {
       <Router history={history}>
         <Switch>
           <PrivateRoute exact path="/" component={HomePage} />
-          <Route path="/login" component={LoginPage} />
-          <Route path="/register" component={RegisterPage} />
+          <PublicRoute exact path="/login" component={LoginPage} />
+          <PublicRoute exact path="/register" component={RegisterPage} />
           <Redirect from="*" to="/" />
         </Switch>
       </Router>

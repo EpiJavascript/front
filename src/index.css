@@ -16,6 +16,11 @@ body {
 
 #home aside {
   margin-left: -3px;
+  overflow-y: auto;
+}
+
+#home aside::-webkit-scrollbar {
+  display: none;
 }
 
 .ed-brand {

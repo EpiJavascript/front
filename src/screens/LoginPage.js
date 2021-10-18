@@ -16,7 +16,7 @@ function LoginPage() {
     password: '',
   });
   const { email, password } = inputs;
-  const loggingIn = useSelector((state) => state.authentication.loggingIn);
+  const isLoggingIn = useSelector((state) => state.authentication.isLoggingIn);
   const dispatch = useDispatch();
   const location = useLocation();
 
@@ -131,7 +131,7 @@ function LoginPage() {
                   type="submit"
                   className="w-full flex justify-center bg-purple-700  hover:bg-purple-500 text-purple-100 p-3 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500"
                 >
-                  {loggingIn && <span className="spinner-border spinner-border-sm mr-1" />}
+                  {isLoggingIn && <span className="spinner-border spinner-border-sm mr-1" />}
                   Sign in
                 </button>
                 {alert.message && alert.type === 'alert-danger' && (

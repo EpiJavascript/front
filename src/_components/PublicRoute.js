@@ -8,8 +8,8 @@ function PrivateRoute({ component: Component }) {
   return (
     <Route
       render={({ location }) => {
-        if (!isLoggedIn) {
-          return <Redirect to={{ pathname: '/login', state: { from: location } }} />;
+        if (isLoggedIn) {
+          return <Redirect to={{ pathname: '/', state: { from: location } }} />;
         }
         return <Component />;
       }}
