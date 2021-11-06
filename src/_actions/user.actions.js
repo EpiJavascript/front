@@ -1,86 +1,89 @@
-import userConstants from '../_constants/user.constants';
-import userService from '../_services/user.service';
-import alertActions from './alert.actions';
-import history from '../_helpers/history';
-
-function login(email, password, from) {
-  function request(user) {
-    return { type: userConstants.LOGIN_REQUEST, user };
-  }
-  function success(user) {
-    return { type: userConstants.LOGIN_SUCCESS, user };
-  }
-  function failure(error) {
-    return { type: userConstants.LOGIN_FAILURE, error };
-  }
-
-  return (dispatch) => {
-    dispatch(request({ email }));
-
-    userService.login(email, password).then(
-      (user) => {
-        dispatch(success(user));
-        history.push(from);
-      },
-      (error) => {
-        dispatch(failure(error.message));
-        dispatch(alertActions.error(error.message));
-      },
-    );
-  };
-}
+import authHeader from '../_helpers/auth-header';
+import { userConstants } from '../_constants';
+import store from '../_helpers/store';
 
 function logout() {
-  userService.logout();
-  return { type: userConstants.LOGOUT };
+  localStorage.removeItem('user');
+  store.dispatch({ type: userConstants.LOGOUT });
+}
+
+function login(email, password) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  };
+
+  store.dispatch({ type: userConstants.LOGIN_REQUEST });
+  return fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/login`, requestOptions)
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error(response.status);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      store.dispatch({ type: userConstants.LOGIN_SUCCESS, user: data });
+      localStorage.setItem('user', JSON.stringify(data));
+      return data;
+    })
+    .catch((error = undefined) => {
+      store.dispatch({ type: userConstants.LOGIN_FAILURE, error });
+      if (error) throw error;
+      throw new Error(error);
+    });
 }
 
 function register(user) {
-  function request() {
-    return { type: userConstants.REGISTER_REQUEST, user };
-  }
-  function success() {
-    return { type: userConstants.REGISTER_SUCCESS, user };
-  }
-  function failure(error) {
-    return { type: userConstants.REGISTER_FAILURE, error };
-  }
-
-  return (dispatch) => {
-    dispatch(request(user));
-
-    userService.register(user).then(
-      () => {
-        dispatch(success());
-        history.push('/login');
-        dispatch(alertActions.success('Registration successful. Please login.'));
-      },
-      (error) => {
-        dispatch(failure(error.message));
-        dispatch(alertActions.error(error.message));
-      },
-    );
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(user),
   };
+
+  store.dispatch({ type: userConstants.REGISTER_REQUEST });
+  return fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/register`, requestOptions)
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error(response.status);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      store.dispatch({ type: userConstants.REGISTER_SUCCESS, user: data });
+      return data;
+    })
+    .catch((error = undefined) => {
+      store.dispatch({ type: userConstants.REGISTER_FAILURE, error });
+      console.log(error);
+      if (error) throw error;
+      throw new Error(error);
+    });
 }
 
 function getSelfUser() {
-  function request() {
-    return { type: userConstants.GETSELFUSER_REQUEST };
-  }
-  function success(user) {
-    return { type: userConstants.GETSELFUSER_SUCCESS, user };
-  }
-  function failure(error) {
-    return { type: userConstants.GETSELFUSER_FAILURE, error };
-  }
-  return (dispatch) => {
-    dispatch(request());
-
-    userService.getSelfUser().then(
-      (user) => dispatch(success(user)),
-      (error) => dispatch(failure(error.toString())),
-    );
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader(),
   };
+
+  store.dispatch({ type: userConstants.GETSELFUSER_REQUEST });
+  return fetch(`${process.env.REACT_APP_BACKEND_URL}/api/users/me`, requestOptions)
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error(response.status);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      store.dispatch({ type: userConstants.GETSELFUSER_SUCCESS, user: data });
+      return data;
+    })
+    .catch((error = undefined) => {
+      store.dispatch({ type: userConstants.GETSELFUSER_FAILURE, error });
+      if (error) throw error;
+      throw new Error(error);
+    });
 }
 
 const userActions = {

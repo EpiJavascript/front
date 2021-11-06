@@ -1,28 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-
-import userActions from '../_actions/user.actions';
-import errorConstant from '../_constants/error.constants';
+import React, { useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { errorConstants } from '../_constants';
+import { userActions } from '../_actions';
 
 function RegisterPage() {
-  const alert = useSelector((state) => state.alert);
+  const history = useHistory();
   const [user, setUser] = useState({
     email: 'axel@mail.com',
     username: 'Axel',
     password: 'p@ssword',
   });
-  const [errors, setErrors] = useState({
+  const [formErrors, setformErrors] = useState({
     email: '',
     username: '',
     password: '',
   });
+  const [alert, setAlert] = useState({});
   const registering = useSelector((state) => state.registration.registering);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(userActions.logout());
-  }, [dispatch]);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -31,7 +26,7 @@ function RegisterPage() {
 
   function handleValidation() {
     let isFormValid = true;
-    const currentErrors = {
+    const currentformErrors = {
       email: '',
       username: '',
       password: '',
@@ -39,7 +34,7 @@ function RegisterPage() {
 
     if (!user.email) {
       isFormValid = false;
-      currentErrors.email = 'Please enter a valid adress email.';
+      currentformErrors.email = 'Please enter a valid adress email.';
     } else {
       const lastAtPos = user.email.lastIndexOf('@');
       const lastDotPos = user.email.lastIndexOf('.');
@@ -53,37 +48,40 @@ function RegisterPage() {
         )
       ) {
         isFormValid = false;
-        currentErrors.email = 'Please enter a valid adress email.';
+        currentformErrors.email = 'Please enter a valid adress email.';
       }
     }
 
     if (!user.username) {
       isFormValid = false;
-      currentErrors.username = 'Please enter a username.';
+      currentformErrors.username = 'Please enter a username.';
     } else if (!user.username.match(/^[a-zA-Z0-9]+$/)) {
       isFormValid = false;
-      currentErrors.username = 'Unauthorized characters.';
+      currentformErrors.username = 'Unauthorized characters.';
     }
 
     if (!user.password) {
       isFormValid = false;
-      currentErrors.password = 'Please enter a password.';
+      currentformErrors.password = 'Please enter a password.';
     } else if (user.password.length < 8) {
       isFormValid = false;
-      currentErrors.password = 'Length must be at least 8 characters.';
+      currentformErrors.password = 'Length must be at least 8 characters.';
     }
 
-    setErrors(() => (currentErrors));
+    setformErrors(() => (currentformErrors));
     return isFormValid;
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-
+    setAlert({});
     if (handleValidation()) {
-      dispatch(userActions.register(user));
-      // if (alert.message === '')
-      // dispatch(userActions.login(user.email, user.password, { from: { pathname: '/' } }));
+      userActions.register(user).then(() => {
+        history.push('/login');
+      })
+        .catch((error) => {
+          setAlert({ type: 'alert-danger', message: error.message });
+        });
     }
   }
 
@@ -116,11 +114,11 @@ function RegisterPage() {
                     onChange={handleChange}
                   />
                 </label>
-                {errors.email && (
+                {formErrors.email && (
                   <div className="text-red-700" role="alert">
                     <span className="text-sm">
                       <i className="mr-2 fas fa-exclamation-triangle" />
-                      {errors.email}
+                      {formErrors.email}
                     </span>
                   </div>
                 )}
@@ -137,11 +135,11 @@ function RegisterPage() {
                     onChange={handleChange}
                   />
                 </label>
-                {errors.username && (
+                {formErrors.username && (
                   <div className="text-red-700" role="alert">
                     <span className="text-sm">
                       <i className="mr-2 fas fa-exclamation-triangle" />
-                      {errors.username}
+                      {formErrors.username}
                     </span>
                   </div>
                 )}
@@ -158,11 +156,11 @@ function RegisterPage() {
                     onChange={handleChange}
                   />
                 </label>
-                {errors.password && (
+                {formErrors.password && (
                   <div className="text-red-700" role="alert">
                     <span className="text-sm">
                       <i className="mr-2 fas fa-exclamation-triangle" />
-                      {errors.password}
+                      {formErrors.password}
                     </span>
                   </div>
                 )}
@@ -187,7 +185,7 @@ function RegisterPage() {
                   <div className="mt-3 text-red-700" role="alert">
                     <span className="text-sm">
                       <i className="mr-2 fas fa-exclamation-triangle" />
-                      {errorConstant[alert.message]}
+                      {errorConstants[alert.message]}
                     </span>
                   </div>
                 )}

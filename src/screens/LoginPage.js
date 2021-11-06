@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-
-import userActions from '../_actions/user.actions';
-import errorConstant from '../_constants/error.constants';
+import { useSelector } from 'react-redux';
+import { errorConstants } from '../_constants';
+import { userActions } from '../_actions';
 
 function LoginPage() {
-  const alert = useSelector((state) => state.alert);
   const [inputs, setInputs] = useState({
     email: 'axel@mail.com',
     password: 'p@ssword',
@@ -15,14 +13,17 @@ function LoginPage() {
     email: '',
     password: '',
   });
+  const [alert, setAlert] = useState({});
   const { email, password } = inputs;
   const isLoggingIn = useSelector((state) => state.authentication.isLoggingIn);
-  const dispatch = useDispatch();
+  const isRegistered = useSelector((state) => state.registration.registered);
   const location = useLocation();
 
   useEffect(() => {
-    dispatch(userActions.logout());
-  }, [dispatch]);
+    if (isRegistered) {
+      setAlert({ type: 'alert-success', message: 'Registration successful. Please login.' });
+    }
+  }, [isRegistered]);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -55,7 +56,11 @@ function LoginPage() {
 
     if (handleValidation()) {
       const { from } = location.state || { from: { pathname: '/' } };
-      dispatch(userActions.login(email, password, from));
+      userActions.login(email, password, from).then(() => {
+      })
+        .catch((error) => {
+          setAlert({ type: 'alert-danger', message: error.message });
+        });
     }
   }
 
@@ -138,7 +143,7 @@ function LoginPage() {
                   <div className="mt-3 text-red-700" role="alert">
                     <span className="text-sm">
                       <i className="mr-2 fas fa-exclamation-triangle" />
-                      {errorConstant[alert.message]}
+                      {errorConstants[alert.message]}
                     </span>
                   </div>
                 )}

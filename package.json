@@ -5,6 +5,7 @@
   "dependencies": {
     "@craco/craco": "^6.3.0",
     "@fontsource/roboto": "^4.5.0",
+    "autoprefixer": "^9.8.8",
     "history": "^4.10.1",
     "prop-types": "^15.7.2",
     "react": "^16.13.0",
@@ -16,8 +17,8 @@
     "redux": "^4.0.5",
     "redux-logger": "^4.0.0",
     "redux-thunk": "^2.3.0",
-    "autoprefixer": "^9.8.8",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.16"
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.16",
+    "use-async-effect": "^2.2.3"
   },
   "scripts": {
     "start": "craco start",

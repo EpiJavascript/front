@@ -1,17 +1,20 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import CreateServer from '../modals/CreateServer';
 import userActions from '../_actions/user.actions';
 
 function ServersSidebar() {
-  const dispatch = useDispatch();
+  const history = useHistory();
   const user = useSelector((state) => state.user.user);
   const [isCreateServerModalOpen, createServerModalOpenIs] = React.useState(false);
 
   useEffect(() => {
-    dispatch(userActions.getSelfUser());
-  }, [dispatch]);
+    userActions.getSelfUser().then(() => {
+    }).catch((error) => {
+      console.log(error);
+    });
+  }, []);
 
   const openCreateServerModal = () => {
     createServerModalOpenIs(true);
@@ -19,6 +22,11 @@ function ServersSidebar() {
 
   const closeCreateServerModal = () => {
     createServerModalOpenIs(false);
+  };
+
+  const logout = () => {
+    userActions.logout();
+    history.push('/login');
   };
 
   return (
@@ -69,9 +77,10 @@ function ServersSidebar() {
           className="transition-server ease-in duration-200 bg-gray-600 hover:bg-indigo-500 rounded-full
         h-12 w-12 flex items-center justify-center cursor-pointer"
         >
-          <Link to="/login" className="text-2xl text-white flex self-center">
+          <button type="button" onClick={logout} className="text-2xl text-white flex self-center">
             <i className="fal fa-sign-out-alt" />
-          </Link>
+            {isCreateServerModalOpen}
+          </button>
         </div>
       </div>
       {user
