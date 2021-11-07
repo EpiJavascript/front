@@ -7,9 +7,9 @@ import { userActions } from '../_actions';
 function RegisterPage() {
   const history = useHistory();
   const [user, setUser] = useState({
-    email: 'axel@mail.com',
-    username: 'Axel',
-    password: 'p@ssword',
+    email: '',
+    username: '',
+    password: '',
   });
   const [formErrors, setformErrors] = useState({
     email: '',

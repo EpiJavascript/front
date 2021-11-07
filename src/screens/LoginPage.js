@@ -7,8 +7,8 @@ import t from '../_helpers/localization';
 
 function LoginPage() {
   const [inputs, setInputs] = useState({
-    email: 'axel@mail.com',
-    password: 'p@ssword',
+    email: '',
+    password: '',
   });
   const [errors, setErrors] = useState({
     email: '',
