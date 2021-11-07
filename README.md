@@ -1,44 +1,67 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
+# EpiJavascript - back
 
-## Available Scripts
+## Table of Contents
 
-In the project directory, you can run:
+* [About the Project](#about-the-project)
+  * [Built With](#built-with)
+* [Getting Started](#getting-started)
+  * [Prerequisites](#prerequisites)
+  * [Installation](#installation)
+* [Running the app](#running-the-app)
+  * [Environment variable](#environment-variable)
+* [Deployment](#deployment)
+* [License](#license)
+* [Contact](#contact)
 
-### `yarn start`
+## About The Project
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Recreation of a discord web application.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+Front of the [back](https://github.com/EpiJavascript/back) project.
 
-### `yarn test`
+### Built With
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+* [React.js](https://fr.reactjs.org/)
+* [Tailwind CSS](https://tailwindcss.com/)
 
-### `yarn build`
+## Getting Started
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Prerequisites
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+* [Node](https://nodejs.org/) v.14.17.5 (lts/fermium)
+* [Npm](https://www.npmjs.com/) according to the _Node_ version
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Installation
 
-### `yarn eject`
+```sh
+npm i
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Running the app
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+# development
+$ npm run start
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+# production mode
+$ npm run build
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Environment variable
 
-## Learn More
+The app loads a dotenv file depending on your NODE_ENV environment variable (fallback to _development_) : `.env.$NODE_ENV`.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Deployment
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+This project is link with multiple [Heroku](https://www.heroku.com) applications, pushing to some branches will trigger an auto-deployment :
+* dev -> https://dashboard.heroku.com/apps/epi-javascript-frontend-dev
+* master -> https://dashboard.heroku.com/apps/epi-javascript-frontend-prod
+
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+## Contact
+
+Project Link: [https://github.com/EpiJavascript/front](https://github.com/EpiJavascript/front)
