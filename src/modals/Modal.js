@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactModal from 'react-modal';
 import PropTypes from 'prop-types';
+import t from '../_helpers/localization';
 
 ReactModal.setAppElement('#app');
 
@@ -68,8 +69,8 @@ Modal.propTypes = {
 
 Modal.defaultProps = {
   desc: '',
-  cancelButton: 'Cancel',
-  submitButton: 'Create',
+  cancelButton: t.cancel,
+  submitButton: t.create,
   isSubmitDisabled: false,
   submitButtonType: 'is-primary',
   children: null,

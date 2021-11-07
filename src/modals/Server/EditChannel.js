@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Modal from '../Modal';
 import { serverActions } from '../../_actions';
+import t from '../../_helpers/localization';
 
 function CreateChannel({
   handleClose, isOpen, server, channel,
@@ -60,15 +61,15 @@ function CreateChannel({
       handleClose={handleClose}
       handleSubmit={handleSubmit}
       isOpen={isOpen}
-      title="Edit Text Channel"
+      title={t.editTextChannel}
       desc=""
       isSubmitDisabled={!inputs.channelName}
-      submitButton="Edit Channel"
+      submitButton={t.edit}
     >
       <label htmlFor="channelName" className="text-sm font-medium tracking-wide">
         <div className="mb-2 text-sm">
           <span className="uppercase font-semibold">
-            Channel name
+            {t.channelName}
           </span>
           {errors.channelName && (
             <span>

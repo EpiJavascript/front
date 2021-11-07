@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import Modal from '../Modal';
 import { userActions } from '../../_actions';
+import t from '../../_helpers/localization';
 
 function Logout({
   handleClose, isOpen,
@@ -19,9 +20,9 @@ function Logout({
       handleClose={handleClose}
       handleSubmit={handleSubmit}
       isOpen={isOpen}
-      title="Logout"
-      desc="Are you sure you want to logout?"
-      submitButton="Logout"
+      title={t.logout}
+      desc={t.logoutWarning}
+      submitButton={t.logout}
       submitButtonType="is-danger"
     />
   );

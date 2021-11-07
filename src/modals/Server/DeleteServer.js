@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import Modal from '../Modal';
 import { serverActions } from '../../_actions';
+import t from '../../_helpers/localization';
 
 function DeleteServer({ handleClose, isOpen, server }) {
   const history = useHistory();
@@ -53,16 +54,16 @@ function DeleteServer({ handleClose, isOpen, server }) {
       handleClose={handleClose}
       handleSubmit={handleSubmit}
       isOpen={isOpen}
-      title={`Delete Server '${server.name}'`}
+      title={`${t.deleteServer} '${server.name}'`}
       desc={`Are you sure you want to delete '${server.name}'? This action cannot be undone.`}
       isSubmitDisabled={inputs.serverName.toLowerCase() !== server.name.toLowerCase()}
-      submitButton="Delete Server"
+      submitButton={t.delete}
       submitButtonType="is-danger"
     >
       <label htmlFor="serverName" className="text-sm font-medium tracking-wide">
         <div className="mb-2 text-sm">
           <span className="uppercase font-semibold">
-            Enter server name
+            {t.enterServerName}
           </span>
           {errors.serverName && (
             <span>

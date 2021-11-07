@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import { serverActions } from '../../_actions';
 import { messageConstants } from '../../_constants';
+import t from '../../_helpers/localization';
 
 function Chat({ server }) {
   const dispatch = useDispatch();
@@ -65,10 +66,11 @@ function Chat({ server }) {
       <div>
         <ul id="message-container" className="messageContainer flex-col">
           {messages && messages.map((item) => (
-            <li key={item.id} className="mb-4 px-4 w-full flex justify-start items-center">
+            <li key={item.id} className="my-3 px-4 w-full flex justify-start items-center">
+              <img src={item.user.imageUrl} alt="User Avatar" className="mr-4 rounded-full w-12 h-12 object-cover" />
               <div className="flex-col">
                 <div className="items-center flex">
-                  <h1 className="font-semibold">{item.createdBy}</h1>
+                  <h1 className="font-semibold">{item.user.username}</h1>
                   <span className="ml-2 text-gray-300 text-sm">{moment(item.createdAt).format('L, LT')}</span>
                 </div>
                 <h1>{item.message}</h1>
@@ -94,7 +96,7 @@ function Chat({ server }) {
           tracking-wide font-semibold text-sm cursor-pointer transition ease-in duration-150 disabled:opacity-50
           disabled:cursor-not-allowed bg-indigo-500 hover:bg-indigo-600"
             >
-              Send
+              {t.send}
             </button>
           </label>
         </div>

@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 import ImageUploading from 'react-images-uploading';
 import Modal from '../Modal';
 import { userActions } from '../../_actions';
+import t from '../../_helpers/localization';
 
 function EditUser({ handleClose, isOpen }) {
   const { user } = useSelector((state) => state.user);
@@ -105,16 +106,16 @@ function EditUser({ handleClose, isOpen }) {
       handleClose={handleClose}
       handleSubmit={handleSubmit}
       isOpen={isOpen}
-      title="Edit Your Profile"
-      desc="You can set an avatar!"
+      title={t.editProfil}
+      desc={t.editProfilDesc}
       isSubmitDisabled={!inputs.username}
-      submitButton="Save"
+      submitButton={t.save}
     >
       <label htmlFor="username" className="text-sm font-medium tracking-wide">
         <div className="mb-2 text-sm">
           <div className="mb-4">
             <span className="uppercase font-semibold">
-              User Avatar
+              {t.userAvatar}
             </span>
             <ImageUploading
               multiple
@@ -151,9 +152,13 @@ function EditUser({ handleClose, isOpen }) {
                     <div key={image} className="my-2 image-item items-center flex">
                       <img src={image.data_url} alt="Server Avatar" className="rounded-full w-32 h-32 object-cover" />
                       <div className="mt-2 ml-4 image-item__btn-wrapper">
-                        <button type="button" className="font-bold hover:underline" onClick={() => onImageUpdate(index)}>Update</button>
-                        <span>&nbsp;or&nbsp;</span>
-                        <button type="button" className="font-bold hover:underline" onClick={() => onImageRemove(index)}>Remove</button>
+                        <button type="button" className="font-bold hover:underline" onClick={() => onImageUpdate(index)}>{t.update}</button>
+                        <span>
+                          &nbsp;
+                          {t.or}
+                          &nbsp;
+                        </span>
+                        <button type="button" className="font-bold hover:underline" onClick={() => onImageRemove(index)}>{t.remove}</button>
                       </div>
                     </div>
                   ))}
@@ -162,7 +167,7 @@ function EditUser({ handleClose, isOpen }) {
             </ImageUploading>
           </div>
           <span className="uppercase font-semibold">
-            Username
+            {t.username}
           </span>
           {errors.username && (
             <span>
@@ -201,7 +206,7 @@ function EditUser({ handleClose, isOpen }) {
         />
 
         <span className="uppercase font-semibold">
-          Password
+          {t.password}
         </span>
         {errors.password && (
           <span>

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import Modal from '../Modal';
 import { serverActions } from '../../_actions';
+import t from '../../_helpers/localization';
 
 function DeleteServer({
   handleClose, isOpen, server, channel,
@@ -25,9 +26,9 @@ function DeleteServer({
       handleClose={handleClose}
       handleSubmit={handleSubmit}
       isOpen={isOpen}
-      title={`Delete Channel '${channel.name}'`}
+      title={`${t.deleteChannel} '${channel.name}'`}
       desc={`Are you sure you want to delete '${channel.name}'? This action cannot be undone.`}
-      submitButton="Delete Channel"
+      submitButton={t.delete}
       submitButtonType="is-danger"
     />
   );

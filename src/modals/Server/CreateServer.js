@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Modal from '../Modal';
 import { serverActions } from '../../_actions';
+import t from '../../_helpers/localization';
 
 function CreateServer({ handleClose, isOpen }) {
   const history = useHistory();
@@ -71,14 +72,14 @@ function CreateServer({ handleClose, isOpen }) {
       handleClose={handleClose}
       handleSubmit={handleSubmit}
       isOpen={isOpen}
-      title="Create a server"
-      desc="Give your new server a personality with a name and an icon. You can always change it later."
+      title={t.createServer}
+      desc={t.createServerDesc}
       isSubmitDisabled={!inputs.serverName}
     >
       <label htmlFor="serverName" className="text-sm font-medium tracking-wide">
         <div className="mb-2 text-sm">
           <span className="uppercase font-semibold">
-            Server name
+            {t.serverName}
           </span>
           {errors.serverName && (
             <span>
@@ -97,10 +98,10 @@ function CreateServer({ handleClose, isOpen }) {
           value={inputs.serverName}
           onChange={handleChange}
         />
-        <h1 className="my-2 text-gray-300 text-xl flex justify-center">or</h1>
+        <h1 className="my-2 text-gray-300 text-xl flex justify-center">{t.or}</h1>
         <div className="mb-2 text-sm">
           <span className="uppercase font-semibold">
-            Join a server
+            {t.joinServer}
           </span>
         </div>
         <div className="flex justify-between items-center">
@@ -119,7 +120,7 @@ function CreateServer({ handleClose, isOpen }) {
           tracking-wide font-semibold text-sm cursor-pointer transition ease-in duration-150 disabled:opacity-50
           disabled:cursor-not-allowed bg-green-500 hover:bg-green-600"
           >
-            Join
+            {t.join}
           </button>
         </div>
       </label>

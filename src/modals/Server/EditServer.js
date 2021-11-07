@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import ImageUploading from 'react-images-uploading';
 import Modal from '../Modal';
 import { serverActions } from '../../_actions';
+import t from '../../_helpers/localization';
 
 function EditServer({ handleClose, isOpen, server }) {
   const history = useHistory();
@@ -75,16 +76,16 @@ function EditServer({ handleClose, isOpen, server }) {
       handleClose={handleClose}
       handleSubmit={handleSubmit}
       isOpen={isOpen}
-      title="Edit Server"
-      desc="You can change the name of your server and set a server avatar!"
+      title={t.editServer}
+      desc={t.editServerDesc}
       isSubmitDisabled={!inputs.serverName}
-      submitButton="Edit Server"
+      submitButton={t.edit}
     >
       <label htmlFor="serverName" className="text-sm font-medium tracking-wide">
         <div className="mb-2 text-sm">
           <div className="mb-4">
             <span className="uppercase font-semibold">
-              Server Avatar
+              {t.serverAvatar}
             </span>
             <ImageUploading
               multiple
@@ -121,9 +122,13 @@ function EditServer({ handleClose, isOpen, server }) {
                     <div key={image} className="my-2 image-item items-center flex">
                       <img src={image.data_url} alt="Server Avatar" className="rounded-full w-32 h-32 object-cover" />
                       <div className="mt-2 ml-4 image-item__btn-wrapper">
-                        <button type="button" className="font-bold hover:underline" onClick={() => onImageUpdate(index)}>Update</button>
-                        <span>&nbsp;or&nbsp;</span>
-                        <button type="button" className="font-bold hover:underline" onClick={() => onImageRemove(index)}>Remove</button>
+                        <button type="button" className="font-bold hover:underline" onClick={() => onImageUpdate(index)}>{t.update}</button>
+                        <span>
+                          &nbsp;
+                          {t.or}
+                          &nbsp;
+                        </span>
+                        <button type="button" className="font-bold hover:underline" onClick={() => onImageRemove(index)}>{t.remove}</button>
                       </div>
                     </div>
                   ))}
@@ -132,7 +137,7 @@ function EditServer({ handleClose, isOpen, server }) {
             </ImageUploading>
           </div>
           <span className="uppercase font-semibold">
-            Server name
+            {t.serverName}
           </span>
           {errors.serverName && (
             <span>
@@ -161,8 +166,12 @@ EditServer.propTypes = {
   server: PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    imageUrl: PropTypes.string.isRequired,
+    imageUrl: PropTypes.string,
   }).isRequired,
+};
+
+EditServer.default = {
+  imageUrl: null,
 };
 
 export default EditServer;

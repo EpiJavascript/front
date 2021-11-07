@@ -9,6 +9,7 @@ import {
   CreateChannel, DeleteServer, EditServer, EditChannel, DeleteChannel,
 } from '../../modals/Server';
 import { channelConstants } from '../../_constants';
+import t from '../../_helpers/localization';
 
 function ChannelsSidebar({ server }) {
   const dispatch = useDispatch();
@@ -75,7 +76,7 @@ function ChannelsSidebar({ server }) {
                         ) : (
                           <i className="fal fa-pencil-alt mr-3" />
                         )}
-                        Edit Server
+                        {t.editServer}
                       </button>
                     )}
                   </Menu.Item>
@@ -91,7 +92,7 @@ function ChannelsSidebar({ server }) {
                         ) : (
                           <i className="fal fa-trash-alt mr-3" />
                         )}
-                        Delete Server
+                        {t.deleteServer}
                       </button>
                     )}
                   </Menu.Item>
@@ -102,7 +103,7 @@ function ChannelsSidebar({ server }) {
         </div>
       </div>
       <div className="mt-4 mx-4 font-semibold text-gray-300 flex justify-between text-sm">
-        <h1 className="uppercase">TEXT CHANNELS</h1>
+        <h1 className="uppercase">{t.textChannels}</h1>
         <button type="button" onClick={openCreateChannelModal} className="">
           <i className="fal fa-plus" />
         </button>

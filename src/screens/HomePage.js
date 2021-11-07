@@ -11,6 +11,7 @@ import ServersSidebar from '../components/Server/ServersSidebar';
 import { serverConstants, channelConstants, messageConstants } from '../_constants';
 import authHeader from '../_helpers/auth-header';
 import { serverActions } from '../_actions';
+import t from '../_helpers/localization';
 
 function HomePage() {
   const dispatch = useDispatch();
@@ -45,7 +46,7 @@ function HomePage() {
           })
           .catch(() => { });
       } else {
-        toast.info(payload.message.message, {
+        toast.info(`${payload.createdBy.username}: ${payload.message}`, {
           position: 'top-right',
           autoClose: 5000,
           hideProgressBar: false,
@@ -61,6 +62,8 @@ function HomePage() {
   useEffect(() => {
     dispatch({ type: serverConstants.SERVER_CLEAR });
     dispatch({ type: channelConstants.CHANNEL_CLEAR });
+    const lang = JSON.parse(localStorage.getItem('lang'));
+    if (lang) t.setLanguage(lang);
   }, [dispatch]);
 
   return (

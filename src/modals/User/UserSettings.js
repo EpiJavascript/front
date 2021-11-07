@@ -1,20 +1,31 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
 import { Listbox, Transition } from '@headlessui/react';
+import { useHistory } from 'react-router-dom';
 import Modal from '../Modal';
+import t from '../../_helpers/localization';
 
 function UserSettings({
   handleClose, isOpen,
 }) {
   const history = useHistory();
   const languageMap = [
-    { id: 0, name: 'English' },
-    { id: 1, name: 'Français' },
+    { id: 0, name: 'English', code: 'en' },
+    { id: 1, name: 'Français', code: 'fr' },
   ];
   const [selected, setSelected] = useState(languageMap[0]);
 
+  useEffect(() => {
+    const lang = JSON.parse(localStorage.getItem('lang'));
+    if (lang) {
+      setSelected(languageMap.filter((item) => item.code === lang)[0]);
+    }
+    /* eslint-disable react-hooks/exhaustive-deps */
+  }, []);
+
   const handleSubmit = () => {
+    t.setLanguage(selected.code);
+    localStorage.setItem('lang', JSON.stringify(selected.code));
     handleClose();
     history.go(0);
   };
@@ -24,9 +35,9 @@ function UserSettings({
       handleClose={handleClose}
       handleSubmit={handleSubmit}
       isOpen={isOpen}
-      title="Settings"
-      desc="You can change the website language here"
-      submitButton="Save"
+      title={t.settings}
+      desc={t.descUserSettings}
+      submitButton={t.save}
     >
       <div className="w-48">
         <Listbox value={selected} onChange={setSelected}>
