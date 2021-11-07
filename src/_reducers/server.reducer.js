@@ -1,6 +1,6 @@
 import { serverConstants } from '../_constants';
 
-function user(state = {}, action) {
+function server(state = {}, action) {
   switch (action.type) {
     case serverConstants.SERVER_UPDATE:
       return {
@@ -13,4 +13,4 @@ function user(state = {}, action) {
   }
 }
 
-export default user;
+export default server;

@@ -10,13 +10,15 @@ function CreateServer({ handleClose, isOpen }) {
   const user = useSelector((state) => state.user.user);
   const [inputs, setInputs] = useState({
     serverName: '',
+    serverId: '',
   });
   const [errors, setErrors] = useState({
     serverName: '',
+    serverId: '',
   });
 
   useEffect(() => {
-    setInputs(() => ({ serverName: `${user.username}'s server` }));
+    setInputs(() => ({ serverName: `${user.username}'s server`, serverId: '' }));
   }, [setInputs, user]);
 
   const handleChange = (e) => {
@@ -42,12 +44,21 @@ function CreateServer({ handleClose, isOpen }) {
     return isFormValid;
   };
 
+  const handleJoin = () => {
+    serverActions.joinServer(inputs.serverId)
+      .then(() => {
+        handleClose();
+        history.push(`/server/${inputs.serverId}`);
+        history.go(0);
+      })
+      .catch(() => setErrors(() => ({ serverName: 'Something went wrong.' })));
+  };
+
   const handleSubmit = () => {
     if (handleValidation()) {
       serverActions.createServer(inputs.serverName)
         .then((server) => {
           handleClose();
-          console.log(server.id);
           history.push(`/server/${server.id}`);
           history.go(0);
         })
@@ -86,6 +97,31 @@ function CreateServer({ handleClose, isOpen }) {
           value={inputs.serverName}
           onChange={handleChange}
         />
+        <h1 className="my-2 text-gray-300 text-xl flex justify-center">or</h1>
+        <div className="mb-2 text-sm">
+          <span className="uppercase font-semibold">
+            Join a server
+          </span>
+        </div>
+        <div className="flex justify-between items-center">
+          <input
+            name="serverId"
+            className="w-full text-gray-800 font-medium px-4 py-2 mr-4 border rounded focus:outline-none focus:border-indigo-500"
+            type="text"
+            placeholder="Server ID"
+            value={inputs.serverId}
+            onChange={handleChange}
+          />
+          <button
+            type="button"
+            onClick={handleJoin}
+            className="flex justify-center items-center h-9 min-w-96 rounded px-4
+          tracking-wide font-semibold text-sm cursor-pointer transition ease-in duration-150 disabled:opacity-50
+          disabled:cursor-not-allowed bg-green-500 hover:bg-green-600"
+          >
+            Join
+          </button>
+        </div>
       </label>
     </Modal>
   );

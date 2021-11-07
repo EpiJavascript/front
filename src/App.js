@@ -3,6 +3,7 @@ import {
   Router, Switch,
 } from 'react-router-dom';
 import './index.css';
+import { ToastContainer } from 'react-toastify';
 
 import history from './_helpers/history';
 import PrivateRoute from './_components/PrivateRoute';
@@ -22,6 +23,7 @@ function App() {
           {/* <Redirect from="*" to="/" /> */}
         </Switch>
       </Router>
+      <ToastContainer limit={5} />
     </div>
   );
 }

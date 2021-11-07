@@ -1,14 +1,18 @@
-import { Menu, Transition } from '@headlessui/react';
 import React, {
   Fragment, useEffect, useState,
 } from 'react';
+import PropTypes from 'prop-types';
+import { Menu, Transition } from '@headlessui/react';
+import { useDispatch, useSelector } from 'react-redux';
 import { serverActions } from '../../_actions';
 import {
   CreateChannel, DeleteServer, EditServer, EditChannel, DeleteChannel,
 } from '../../modals/Server';
+import { channelConstants } from '../../_constants';
 
-/* eslint-disable react/prop-types */
 function ChannelsSidebar({ server }) {
+  const dispatch = useDispatch();
+  const { channel } = useSelector((state) => state.channel);
   const [channels, setChannels] = useState([]);
   const [selectedChannel, setSelectedChannel] = useState(undefined);
   const [isDeleteServerModalOpen, deleteServerModalOpenIs] = useState(false);
@@ -25,19 +29,21 @@ function ChannelsSidebar({ server }) {
   const [isDeleteChannelModalOpen, deleteChannelModalOpenIs] = useState(false);
   const closeDeleteChannelModal = () => deleteChannelModalOpenIs(false);
 
+  const handleChannel = (currChannel) => {
+    dispatch({ type: channelConstants.CHANNEL_UPDATE, channel: currChannel });
+  };
+
   useEffect(() => {
     if (server.id) {
       serverActions.getServerChannels(server.id).then((data) => {
         setChannels(data);
-      }).catch((error) => {
-        console.log(error);
-      });
+      }).catch(() => { });
     }
   }, [server]);
 
   return (
-    <div id="server" className="h-screen w-64 bg-gray-700 text-white">
-      <div className="px-4 h-12 w-full flex justify-between items-center">
+    <div id="server" className="h-full w-72 bg-gray-700 text-white">
+      <div className="px-4 h-12 w-full flex justify-between items-center" style={{ backgroundColor: '#2b3544' }}>
         <h1 className="text-lg font-bold whitespace-nowrap overflow-ellipsis overflow-hidden">{server.name}</h1>
         <div className="">
           <Menu as="div" className="relative inline-block text-left">
@@ -62,14 +68,14 @@ function ChannelsSidebar({ server }) {
                       <button
                         type="button"
                         onClick={openEditServerModal}
-                        className={`${active ? 'bg-indigo-500 text-white' : 'text-gray-200'} group flex rounded-md items-center w-full px-3 py-2 text-sm`}
+                        className={`${active ? 'bg-indigo-500 text-white' : 'text-gray-300'} group flex rounded-md items-center w-full px-3 py-2 text-sm`}
                       >
                         {active ? (
                           <i className="fas fa-pencil-alt mr-3" />
                         ) : (
                           <i className="fal fa-pencil-alt mr-3" />
                         )}
-                        Edit
+                        Edit Server
                       </button>
                     )}
                   </Menu.Item>
@@ -78,7 +84,7 @@ function ChannelsSidebar({ server }) {
                       <button
                         type="button"
                         onClick={openDeleteServerModal}
-                        className={`${active ? 'bg-indigo-500 text-white' : 'text-gray-200'} group flex rounded-md items-center w-full px-3 py-2 text-sm`}
+                        className={`${active ? 'bg-indigo-500 text-white' : 'text-gray-300'} group flex rounded-md items-center w-full px-3 py-2 text-sm`}
                       >
                         {active ? (
                           <i className="fas fa-trash-alt mr-3" />
@@ -95,7 +101,7 @@ function ChannelsSidebar({ server }) {
           </Menu>
         </div>
       </div>
-      <div className="mt-4 mx-4 font-semibold text-gray-200 flex justify-between text-sm">
+      <div className="mt-4 mx-4 font-semibold text-gray-300 flex justify-between text-sm">
         <h1 className="uppercase">TEXT CHANNELS</h1>
         <button type="button" onClick={openCreateChannelModal} className="">
           <i className="fal fa-plus" />
@@ -103,22 +109,29 @@ function ChannelsSidebar({ server }) {
       </div>
       <ul className="my-3">
         {
-          channels.map((channel) => (
-            <li key={channel.id} className="mb-1 w-full flex items-center">
+          channels.map((item) => (
+            <li key={item.id} className="mb-1 w-full flex items-center">
               <div
-                className="group px-2 py-1 mx-2 flex w-full items-center justify-between hover:bg-gray-600 text-gray-200
-              hover:rounded-md cursor-pointer transition-server ease-in-out duration-200"
+                className={`group px-2 py-1 mx-2 flex w-full items-center justify-between text-gray-300
+              cursor-pointer transition-server ease-in-out duration-200
+              ${channel && channel.id === item.id ? 'bg-gray-600 rounded-md' : 'hover:bg-gray-600 hover:rounded-md'}`}
               >
-                <div className="flex items-center">
-                  <i className="mr-2 fas fa-hashtag" />
-                  <h1 className="text-lg whitespace-nowrap overflow-ellipsis overflow-hidden">{channel.name}</h1>
-                </div>
-                <div className="flex items-center hidden group-hover:flex">
+                <button
+                  type="button"
+                  onClick={() => { handleChannel(item); }}
+                  className="flex items-center w-full"
+                >
+                  <div className="flex items-center">
+                    <i className="mr-2 fas fa-hashtag" />
+                    <h1 className="text-lg whitespace-nowrap overflow-ellipsis overflow-hidden">{item.name}</h1>
+                  </div>
+                </button>
+                <div className={`flex items-center ${channel && channel.id === item.id ? 'flex' : 'hidden group-hover:flex'}`}>
                   <button
                     type="button"
                     className="hover:text-white"
                     onClick={() => {
-                      setSelectedChannel(channel);
+                      setSelectedChannel(item);
                       editChannelModalOpenIs(true);
                     }}
                   >
@@ -128,7 +141,7 @@ function ChannelsSidebar({ server }) {
                     type="button"
                     className="hover:text-white"
                     onClick={() => {
-                      setSelectedChannel(channel);
+                      setSelectedChannel(item);
                       deleteChannelModalOpenIs(true);
                     }}
                   >
@@ -140,43 +153,51 @@ function ChannelsSidebar({ server }) {
           ))
         }
       </ul>
-      {server.id && (
-        <div>
-          <DeleteServer
-            handleClose={closeDeleteServerModal}
-            isOpen={isDeleteServerModalOpen}
-            server={server}
-          />
-          <EditServer
-            handleClose={closeEditServerModal}
-            isOpen={isEditServerModalOpen}
-            server={server}
-          />
-          <CreateChannel
-            handleClose={closeCreateChannelModal}
-            isOpen={isCreateChannelModalOpen}
-            server={server}
-          />
-          {selectedChannel && (
-            <div>
-              <EditChannel
-                handleClose={closeEditChannelModal}
-                isOpen={isEditChannelModalOpen}
-                server={server}
-                channel={selectedChannel}
-              />
-              <DeleteChannel
-                handleClose={closeDeleteChannelModal}
-                isOpen={isDeleteChannelModalOpen}
-                server={server}
-                channel={selectedChannel}
-              />
-            </div>
-          )}
-        </div>
-      )}
+      {
+        server.id && (
+          <div>
+            <DeleteServer
+              handleClose={closeDeleteServerModal}
+              isOpen={isDeleteServerModalOpen}
+              server={server}
+            />
+            <EditServer
+              handleClose={closeEditServerModal}
+              isOpen={isEditServerModalOpen}
+              server={server}
+            />
+            <CreateChannel
+              handleClose={closeCreateChannelModal}
+              isOpen={isCreateChannelModalOpen}
+              server={server}
+            />
+            {selectedChannel && (
+              <div>
+                <EditChannel
+                  handleClose={closeEditChannelModal}
+                  isOpen={isEditChannelModalOpen}
+                  server={server}
+                  channel={selectedChannel}
+                />
+                <DeleteChannel
+                  handleClose={closeDeleteChannelModal}
+                  isOpen={isDeleteChannelModalOpen}
+                  server={server}
+                  channel={selectedChannel}
+                />
+              </div>
+            )}
+          </div>
+        )
+      }
     </div>
   );
 }
 
 export default ChannelsSidebar;
+ChannelsSidebar.propTypes = {
+  server: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
+};

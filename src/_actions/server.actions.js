@@ -21,11 +21,38 @@ function createServer(name) {
     });
 }
 
-function editServer({ id, name, image }) {
+function joinServer(id) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: authHeader().Authorization },
+  };
+
+  return fetch(`${process.env.REACT_APP_BACKEND_URL}/api/servers/${id}/join`, requestOptions)
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error(response.status);
+      }
+      return response.json();
+    })
+    .then((data) => data)
+    .catch((error = undefined) => {
+      if (error) throw error;
+      throw new Error(error);
+    });
+}
+
+async function editServer({ id, name, image }) {
+  const formData = new FormData();
+  if (image) {
+    const base64Response = await fetch(`${image.data_url}`);
+    const blob = await base64Response.blob();
+    formData.append('image', blob, image.file.name);
+  }
+  formData.append('name', name);
   const requestOptions = {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json', Authorization: authHeader().Authorization },
-    body: JSON.stringify({ name, image }),
+    headers: { Authorization: authHeader().Authorization },
+    body: formData,
   };
 
   return fetch(`${process.env.REACT_APP_BACKEND_URL}/api/servers/${id}`, requestOptions)
@@ -145,6 +172,47 @@ function deleteChannelServer({ serverId, channelId }) {
     });
 }
 
+function getServerChannelMessages({ serverId, channelId }) {
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json', Authorization: authHeader().Authorization },
+  };
+
+  return fetch(`${process.env.REACT_APP_BACKEND_URL}/api/servers/${serverId}/channels/${channelId}/messages`, requestOptions)
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error(response.status);
+      }
+      return response.json();
+    })
+    .then((data) => data)
+    .catch((error = undefined) => {
+      if (error) throw error;
+      throw new Error(error);
+    });
+}
+
+function sendServerChannelMessages({ serverId, channelId, message }) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: authHeader().Authorization },
+    body: JSON.stringify({ message }),
+  };
+
+  return fetch(`${process.env.REACT_APP_BACKEND_URL}/api/servers/${serverId}/channels/${channelId}/messages`, requestOptions)
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error(response.status);
+      }
+      return response.json();
+    })
+    .then((data) => data)
+    .catch((error = undefined) => {
+      if (error) throw error;
+      throw new Error(error);
+    });
+}
+
 const serverActions = {
   createServer,
   editServer,
@@ -153,6 +221,9 @@ const serverActions = {
   createChannelServer,
   editChannelServer,
   deleteChannelServer,
+  joinServer,
+  getServerChannelMessages,
+  sendServerChannelMessages,
 };
 
 export default serverActions;

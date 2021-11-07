@@ -12,6 +12,7 @@ body {
   /* background: #edf2f7; */
   /* font-family: Rubik, sans-serif, 'Helvetica Neue', Helvetica, Arial, sans-serif; */
   font-family: Helvetica Neue, helvetica, arial, sans-serif;
+  overflow-y: hidden;
 }
 
 #home aside {
@@ -21,6 +22,11 @@ body {
 
 #home aside::-webkit-scrollbar {
   display: none;
+}
+
+.messageContainer {
+  overflow-y: auto;
+  height: calc(100vh - 108px);
 }
 
 .ed-brand {

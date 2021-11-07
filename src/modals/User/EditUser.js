@@ -1,32 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import ImageUploading from 'react-images-uploading';
 import Modal from '../Modal';
-import { serverActions } from '../../_actions';
+import { userActions } from '../../_actions';
 
-function EditServer({ handleClose, isOpen, server }) {
+function EditUser({ handleClose, isOpen }) {
+  const { user } = useSelector((state) => state.user);
   const history = useHistory();
   const [inputs, setInputs] = useState({
-    serverName: undefined,
+    username: '',
+    email: '',
+    password: '',
     images: [],
   });
   const [errors, setErrors] = useState({
-    serverName: undefined,
+    username: undefined,
+    email: undefined,
+    password: undefined,
   });
   const maxNumber = 1;
 
-  const onChange = (imageList) => {
+  const handleImageChange = (imageList) => {
     setInputs(() => ({ ...inputs, images: imageList }));
   };
 
   useEffect(() => {
-    if (server.imageUrl) {
-      setInputs(() => ({ serverName: server.name, images: [{ data_url: server.imageUrl }] }));
+    if (user.imageUrl) {
+      setInputs(() => ({
+        username: user.username, email: user.email, images: [{ data_url: user.imageUrl }],
+      }));
     } else {
-      setInputs(() => ({ serverName: server.name, images: [] }));
+      setInputs(() => ({ username: user.username, email: user.email, images: [] }));
     }
-  }, [setInputs, server]);
+  }, [setInputs, user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,15 +44,35 @@ function EditServer({ handleClose, isOpen, server }) {
   const handleValidation = () => {
     let isFormValid = true;
     const currentErrors = {
-      serverName: '',
+      username: '',
     };
 
-    if (!inputs.serverName) {
+    if (!inputs.username) {
       isFormValid = false;
-      currentErrors.serverName = 'Field required';
-    } else if (inputs.serverName.length < 2 || inputs.serverName.length > 100) {
+      currentErrors.username = 'Field required';
+    } else if (inputs.username.length < 2 || inputs.username.length > 100) {
       isFormValid = false;
-      currentErrors.serverName = 'Must be between 2 and 100 in length.';
+      currentErrors.username = 'Must be between 2 and 100 in length.';
+    }
+
+    if (!user.email) {
+      isFormValid = false;
+      currentErrors.email = 'Please enter a valid adress email.';
+    } else {
+      const lastAtPos = user.email.lastIndexOf('@');
+      const lastDotPos = user.email.lastIndexOf('.');
+      if (
+        !(
+          lastAtPos < lastDotPos
+          && lastAtPos > 0
+          && user.email.indexOf('@@') === -1
+          && lastDotPos > 2
+          && user.email.length - lastDotPos > 2
+        )
+      ) {
+        isFormValid = false;
+        currentErrors.email = 'Please enter a valid adress email.';
+      }
     }
 
     setErrors(() => (currentErrors));
@@ -54,19 +82,21 @@ function EditServer({ handleClose, isOpen, server }) {
   const handleSubmit = () => {
     if (handleValidation()) {
       const config = {
-        id: server.id,
-        name: inputs.serverName,
+        id: user.id,
+        username: inputs.username,
+        email: inputs.email,
+        password: inputs.password,
         image: inputs.images[0],
       };
       if (config.image && config.image.data_url.includes('imgur')) {
         config.image = undefined;
       }
-      serverActions.editServer(config)
+      userActions.editUser(config)
         .then(() => {
           handleClose();
           history.go(0);
         })
-        .catch(() => setErrors(() => ({ serverName: 'Something went wrong.' })));
+        .catch(() => setErrors(() => { }));
     }
   };
 
@@ -75,21 +105,21 @@ function EditServer({ handleClose, isOpen, server }) {
       handleClose={handleClose}
       handleSubmit={handleSubmit}
       isOpen={isOpen}
-      title="Edit Server"
-      desc="You can change the name of your server and set a server avatar!"
-      isSubmitDisabled={!inputs.serverName}
-      submitButton="Edit Server"
+      title="Edit Your Profile"
+      desc="You can set an avatar!"
+      isSubmitDisabled={!inputs.username}
+      submitButton="Save"
     >
-      <label htmlFor="serverName" className="text-sm font-medium tracking-wide">
+      <label htmlFor="username" className="text-sm font-medium tracking-wide">
         <div className="mb-2 text-sm">
           <div className="mb-4">
             <span className="uppercase font-semibold">
-              Server Avatar
+              User Avatar
             </span>
             <ImageUploading
               multiple
               value={inputs.images}
-              onChange={onChange}
+              onChange={handleImageChange}
               maxNumber={maxNumber}
               dataURLKey="data_url"
             >
@@ -132,22 +162,60 @@ function EditServer({ handleClose, isOpen, server }) {
             </ImageUploading>
           </div>
           <span className="uppercase font-semibold">
-            Server name
+            Username
           </span>
-          {errors.serverName && (
+          {errors.username && (
             <span>
               &nbsp;-&nbsp;
               <span className="text-sm text-red-500 italic">
-                {errors.serverName}
+                {errors.username}
               </span>
             </span>
           )}
         </div>
         <input
-          name="serverName"
-          className="w-full text-gray-800 font-medium px-4 py-2 border rounded focus:outline-none focus:border-indigo-500"
+          name="username"
+          className="mb-2 w-full text-gray-800 font-medium px-4 py-2 border rounded focus:outline-none focus:border-indigo-500"
           type="text"
-          value={inputs.serverName}
+          value={inputs.username}
+          onChange={handleChange}
+        />
+
+        <span className="uppercase font-semibold">
+          Email
+        </span>
+        {errors.email && (
+          <span>
+            &nbsp;-&nbsp;
+            <span className="text-sm text-red-500 italic">
+              {errors.email}
+            </span>
+          </span>
+        )}
+        <input
+          name="email"
+          className="mb-2 w-full text-gray-800 font-medium px-4 py-2 border rounded focus:outline-none focus:border-indigo-500"
+          type="text"
+          value={inputs.email}
+          onChange={handleChange}
+        />
+
+        <span className="uppercase font-semibold">
+          Password
+        </span>
+        {errors.password && (
+          <span>
+            &nbsp;-&nbsp;
+            <span className="text-sm text-red-500 italic">
+              {errors.password}
+            </span>
+          </span>
+        )}
+        <input
+          name="password"
+          className="w-full text-gray-800 font-medium px-4 py-2 border rounded focus:outline-none focus:border-indigo-500"
+          type="password"
+          value={inputs.password}
           onChange={handleChange}
         />
       </label>
@@ -155,14 +223,9 @@ function EditServer({ handleClose, isOpen, server }) {
   );
 }
 
-EditServer.propTypes = {
+EditUser.propTypes = {
   handleClose: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
-  server: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    imageUrl: PropTypes.string.isRequired,
-  }).isRequired,
 };
 
-export default EditServer;
+export default EditUser;

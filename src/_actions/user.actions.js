@@ -55,7 +55,6 @@ function register(user) {
     })
     .catch((error = undefined) => {
       store.dispatch({ type: userConstants.REGISTER_FAILURE, error });
-      console.log(error);
       if (error) throw error;
       throw new Error(error);
     });
@@ -86,11 +85,44 @@ function getSelfUser() {
     });
 }
 
+async function editUser({
+  id, username, email, image, password,
+}) {
+  const formData = new FormData();
+  if (image) {
+    const base64Response = await fetch(`${image.data_url}`);
+    const blob = await base64Response.blob();
+    formData.append('image', blob, image.file.name);
+  }
+  if (username) formData.append('username', username);
+  if (email) formData.append('email', email);
+  if (password) formData.append('password', password);
+  const requestOptions = {
+    method: 'PUT',
+    headers: { Authorization: authHeader().Authorization },
+    body: formData,
+  };
+
+  return fetch(`${process.env.REACT_APP_BACKEND_URL}/api/users/${id}`, requestOptions)
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error(response.status);
+      }
+      return response.json();
+    })
+    .then((data) => data)
+    .catch((error = undefined) => {
+      if (error) throw error;
+      throw new Error(error);
+    });
+}
+
 const userActions = {
   login,
   logout,
   register,
   getSelfUser,
+  editUser,
 };
 
 export default userActions;

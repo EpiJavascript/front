@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Modal from '../Modal';
 import { serverActions } from '../../_actions';
 
-/* eslint-disable react/prop-types */
 function CreateChannel({ handleClose, isOpen, server }) {
   const history = useHistory();
   const [inputs, setInputs] = useState({
@@ -87,6 +86,10 @@ function CreateChannel({ handleClose, isOpen, server }) {
 CreateChannel.propTypes = {
   handleClose: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
+  server: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default CreateChannel;
