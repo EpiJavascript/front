@@ -6,7 +6,7 @@ ReactModal.setAppElement('#app');
 
 const Modal = ({
   handleClose, handleSubmit, isOpen, title, desc, children, cancelButton, submitButton,
-  isSubmitDisabled,
+  isSubmitDisabled, submitButtonType,
 }) => (
   <ReactModal
     isOpen={isOpen}
@@ -43,9 +43,9 @@ const Modal = ({
         type="button"
         onClick={handleSubmit}
         disabled={isSubmitDisabled}
-        className="flex justify-center items-center h-9 min-w-96 bg-indigo-500 rounded hover:bg-indigo-600 px-4
+        className={`flex justify-center items-center h-9 min-w-96 rounded px-4
           tracking-wide font-semibold text-sm cursor-pointer transition ease-in duration-150 disabled:opacity-50
-          disabled:cursor-not-allowed"
+          disabled:cursor-not-allowed ${submitButtonType === 'is-danger' ? 'bg-red-500 hover:bg-red-600' : 'bg-indigo-500 hover:bg-indigo-600'}`}
       >
         {submitButton}
       </button>
@@ -59,10 +59,11 @@ Modal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
   desc: PropTypes.string,
-  children: PropTypes.element.isRequired,
+  children: PropTypes.element,
   cancelButton: PropTypes.string,
   submitButton: PropTypes.string,
   isSubmitDisabled: PropTypes.bool,
+  submitButtonType: PropTypes.string,
 };
 
 Modal.defaultProps = {
@@ -70,6 +71,8 @@ Modal.defaultProps = {
   cancelButton: 'Cancel',
   submitButton: 'Create',
   isSubmitDisabled: false,
+  submitButtonType: 'is-primary',
+  children: null,
 };
 
 export default Modal;

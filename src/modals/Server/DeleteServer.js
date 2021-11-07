@@ -1,23 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import Modal from './Modal';
-import serverActions from '../_actions/server.actions';
-import userActions from '../_actions/user.actions';
+import { useHistory } from 'react-router-dom';
+import Modal from '../Modal';
+import { serverActions } from '../../_actions';
 
-function CreateServer({ handleClose, isOpen }) {
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.user);
+/* eslint-disable react/prop-types */
+function DeleteServer({ handleClose, isOpen, server }) {
+  const history = useHistory();
   const [inputs, setInputs] = useState({
-    serverName: undefined,
+    serverName: '',
   });
   const [errors, setErrors] = useState({
-    serverName: undefined,
+    serverName: '',
   });
-
-  useEffect(() => {
-    setInputs(() => ({ serverName: `${user.username}'s server` }));
-  }, [setInputs, user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,9 +28,9 @@ function CreateServer({ handleClose, isOpen }) {
     if (!inputs.serverName) {
       isFormValid = false;
       currentErrors.serverName = 'Field required';
-    } else if (inputs.serverName.length < 2 || inputs.serverName.length > 100) {
+    } else if (inputs.serverName.toLowerCase() !== server.name.toLowerCase()) {
       isFormValid = false;
-      currentErrors.serverName = 'Must be between 2 and 100 in length.';
+      currentErrors.serverName = 'You didn\'t enter the server name correctly';
     }
 
     setErrors(() => (currentErrors));
@@ -44,10 +39,11 @@ function CreateServer({ handleClose, isOpen }) {
 
   const handleSubmit = () => {
     if (handleValidation()) {
-      serverActions.createServer(inputs.serverName)
+      serverActions.deleteServer(server.id)
         .then(() => {
-          dispatch(userActions.getSelfUser());
           handleClose();
+          history.push('/');
+          history.go(0);
         })
         .catch(() => setErrors(() => ({ serverName: 'Something went wrong.' })));
     }
@@ -58,14 +54,16 @@ function CreateServer({ handleClose, isOpen }) {
       handleClose={handleClose}
       handleSubmit={handleSubmit}
       isOpen={isOpen}
-      title="Create a server"
-      desc="Give your new server a personality with a name and an icon. You can always change it later."
-      isSubmitDisabled={!inputs.serverName}
+      title={`Delete Server '${server.name}'`}
+      desc={`Are you sure you want to delete '${server.name}'? This action cannot be undone.`}
+      isSubmitDisabled={inputs.serverName.toLowerCase() !== server.name.toLowerCase()}
+      submitButton="Delete Server"
+      submitButtonType="is-danger"
     >
       <label htmlFor="serverName" className="text-sm font-medium tracking-wide">
         <div className="mb-2 text-sm">
           <span className="uppercase font-semibold">
-            Server name
+            Enter server name
           </span>
           {errors.serverName && (
             <span>
@@ -80,7 +78,6 @@ function CreateServer({ handleClose, isOpen }) {
           name="serverName"
           className="w-full text-gray-800 font-medium px-4 py-2 border rounded focus:outline-none focus:border-indigo-500"
           type="text"
-          placeholder="New server"
           value={inputs.serverName}
           onChange={handleChange}
         />
@@ -89,9 +86,9 @@ function CreateServer({ handleClose, isOpen }) {
   );
 }
 
-CreateServer.propTypes = {
+DeleteServer.propTypes = {
   handleClose: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
 };
 
-export default CreateServer;
+export default DeleteServer;

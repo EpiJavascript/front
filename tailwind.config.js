@@ -7,6 +7,7 @@ module.exports = {
       transitionProperty: ['hover', 'focus'],
       opacity: ['disabled'],
       cursor: ['disabled'],
+      display: ['group-hover'],
     },
   },
   theme: {

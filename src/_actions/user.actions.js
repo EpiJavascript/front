@@ -23,8 +23,8 @@ function login(email, password) {
       return response.json();
     })
     .then((data) => {
-      store.dispatch({ type: userConstants.LOGIN_SUCCESS, user: data });
       localStorage.setItem('user', JSON.stringify(data));
+      store.dispatch({ type: userConstants.LOGIN_SUCCESS, user: data });
       return data;
     })
     .catch((error = undefined) => {
@@ -64,7 +64,7 @@ function register(user) {
 function getSelfUser() {
   const requestOptions = {
     method: 'GET',
-    headers: authHeader(),
+    headers: { 'Content-Type': 'application/json', Authorization: authHeader().Authorization },
   };
 
   store.dispatch({ type: userConstants.GETSELFUSER_REQUEST });
